@@ -24,9 +24,11 @@ Congrats! You can try it!
     - [X] draw map (grass and road tiles);
     - [X] enemies with basic logic and animation;
     - [X] towers logic and set location to center of grass tiles;
+    - [X] enemy health bar;
 
 **To-do**:
 
-    - enemy health bar;
-    - economic;
-    - hearts
+    - extend map (add assets of wall with torchs);
+    - add cave (it will be finish point);
+    - decorate map;
+    - add timer at the left top corner;

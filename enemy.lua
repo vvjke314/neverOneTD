@@ -6,10 +6,14 @@ local enemySpeed = 50
 enemies = {}
 local enemySprite = {}
 local quad = {}
+local HP = require("hp")
+-- Счетчик количества врагов
+local counter = 0
 
 
 local path = {
-    {0, 2}, {1,2}, {2,2}, {3,2}, {4,2}, {4,1}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8,0}, {9,0}, {9, 1}, {9, 2}, {9, 3}, {9, 4} 
+    {{0, 2}, {1,2}, {2,2}, {3,2}, {4,2}, {4,1}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8,0}, {9,0}, {9, 1}, {9, 2}, {9, 3}, {9, 4}},
+    {{0, 2}, {1,2}, {2,2}, {3,2}, {4,2}, {4,3}, {4, 4}, {5, 4}, {6, 4}, {7, 4}, {8,4}, {9,4}}
 }
 
 function Enemy.load()
@@ -20,27 +24,47 @@ function Enemy.load()
     quad[0] = love.graphics.newQuad(23, 32, enemySize, enemySize, enemySprite:getDimensions())
     quad[1] = love.graphics.newQuad(85, 32, enemySize, enemySize, enemySprite:getDimensions())
     quad[2] = love.graphics.newQuad(149, 32, enemySize, enemySize, enemySprite:getDimensions())
+
+    -- Загружаем шрифт полоски здоровья
+    HP.load()
 end
 
-
+-- Генерируем врагов
 function Enemy.spawn()
+    -- Увеличиваем счетчик количества врагов
+    counter = counter + 1
+    -- Инициализируем врага
     local enemy = {
-        x = path[1][1] * tileSize,  -- Начальная позиция (в пикселях)
-        y = path[1][2] * tileSize,
+        -- Номер врага
+        number = counter,
+        x = path[counter%2+1][1][1] * tileSize,  -- Начальная позиция (в пикселях)
+        y = path[counter%2+1][1][2] * tileSize,
         targetIndex = 2,  -- Следующая точка маршрута
         speed = enemySpeed,
         state = 0, -- Состояние для отрисовки спрайта
-        timer = 0
+        timer = 0,
+        hp = 100,
     }
+    -- Генерируем полоску здоровья
+    HP.add(enemy.hp, enemy.x, enemy.y)
     table.insert(enemies, enemy)
 end
 
 
 -- Обновляем врагов (двигаем их)
 function Enemy.update(dt)
-    for _, enemy in ipairs(enemies) do
+    for i, enemy in ipairs(enemies) do
+        if enemy.hp < 1 then 
+            table.remove(enemies, i)
+            -- Убираем полоску здоровья
+            table.remove(HpList, i)
+        else 
+            -- Обновляем полоску здоровья
+            HP.update(i, enemy)
+        end
+
         enemy.timer = enemy.timer + dt
-        local target = path[enemy.targetIndex]  -- Берём следующую точку пути
+        local target = path[enemy.number%2+1][enemy.targetIndex]  -- Берём следующую точку пути
         if target then
             local targetX = target[1] * tileSize
             local targetY = target[2] * tileSize
@@ -76,6 +100,7 @@ function Enemy.draw()
     for _, enemy in ipairs(enemies) do
         love.graphics.draw(enemySprite, quad[enemy.state], enemy.x, enemy.y)
     end
+    HP.draw()
 end
 
 

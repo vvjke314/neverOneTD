@@ -1,7 +1,8 @@
 local Weapon = {}
 
 local arrowSizeX, arrowSizeY = 17, 8
-local arrowSpeed = 200
+local arrowSpeed = 500
+local weaponDamage = 20
 
 Weapon.projectiles = {}  -- Список всех стрел
 
@@ -43,9 +44,9 @@ function Weapon.update(dt)
         local dy = proj.target.y - proj.y
         local distance = math.sqrt(dx * dx + dy * dy)
 
-        if distance < 5 then  -- Условие попадания (можно менять)
+        if distance < 10 then  -- Условие попадания
             table.remove(Weapon.projectiles, i)  -- Удаляем стрелу
-            proj.target.hp = proj.target.hp - 10  -- Наносим урон врагу
+            proj.target.hp = proj.target.hp - weaponDamage  -- Наносим урон врагу
         end
     end
 end

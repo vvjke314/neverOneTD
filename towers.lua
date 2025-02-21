@@ -15,7 +15,7 @@ function Towers.load()
 end
 
 function Towers.add(x, y)
-    table.insert(Towers.list, { x = x, y = y, range = 100, fireRate = 1, timer = 0 })
+    table.insert(Towers.list, { x = x, y = y, range = 75, fireRate = 1, timer = 0 })
 end
 
 function Towers.update(dt, enemies)
