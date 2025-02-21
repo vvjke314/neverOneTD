@@ -2,7 +2,7 @@
 Purpose of the project was learn main concepts of Lua language and write simple application in it.
 
 Now game looks like this:
-![alt text](image.png)
+![alt text](docs/image.png)
 
 ## Getting started
 
@@ -17,6 +17,11 @@ After you need to
 
 Congrats! You can try it!
 
+## Guide
+    1. Left click to build the tower
+    2. Right click to remove the tower
+    3. Every 10 seconds enemies got a 10% boost of speed
+
 ## Notes
 
 **Finished**:
@@ -25,10 +30,10 @@ Congrats! You can try it!
     - [X] enemies with basic logic and animation;
     - [X] towers logic and set location to center of grass tiles;
     - [X] enemy health bar;
+    - [X] extend map (add assets of wall);
+    - [X] add timer at the left top corner;
+    - [X] add cave (it will be finish point);
 
 **To-do**:
 
-    - extend map (add assets of wall with torchs);
-    - add cave (it will be finish point);
-    - decorate map;
-    - add timer at the left top corner;
+    thinking about it...

@@ -38,7 +38,7 @@ function Enemy.spawn()
         -- Номер врага
         number = counter,
         x = path[counter%2+1][1][1] * tileSize,  -- Начальная позиция (в пикселях)
-        y = path[counter%2+1][1][2] * tileSize,
+        y = (path[counter%2+1][1][2]+1) * tileSize,
         targetIndex = 2,  -- Следующая точка маршрута
         speed = enemySpeed,
         state = 0, -- Состояние для отрисовки спрайта
@@ -51,10 +51,12 @@ function Enemy.spawn()
 end
 
 
+local prevBuffTime = 10
 -- Обновляем врагов (двигаем их)
-function Enemy.update(dt)
+function Enemy.update(dt, timer)
     for i, enemy in ipairs(enemies) do
-        if enemy.hp < 1 then 
+        -- Удаляем врагов
+        if enemy.hp < 1 then  -- Закончилось здоровье
             table.remove(enemies, i)
             -- Убираем полоску здоровья
             table.remove(HpList, i)
@@ -67,7 +69,10 @@ function Enemy.update(dt)
         local target = path[enemy.number%2+1][enemy.targetIndex]  -- Берём следующую точку пути
         if target then
             local targetX = target[1] * tileSize
-            local targetY = target[2] * tileSize
+            local targetY = (target[2] + 1) * tileSize
+
+            -- Усиливаем врагов
+            if timer - prevBuffTime > 0 then enemySpeed = enemySpeed*1.1; enemy.speed = enemySpeed; prevBuffTime = prevBuffTime*2 end
 
             -- Рассчитываем направление движения
             local dx, dy = targetX - enemy.x, targetY - enemy.y
@@ -87,6 +92,11 @@ function Enemy.update(dt)
                
                 -- Если враг почти достиг точки, переключаемся на следующую
                 if distance < 1 then
+                    if path[enemy.number%2+1][enemy.targetIndex][1] == 9 and path[enemy.number%2+1][enemy.targetIndex][2] == 4 then -- Враги добежали до финиша  
+                        table.remove(enemies, i)
+                        -- Убираем полоску здоровья
+                        table.remove(HpList, i) 
+                    end
                     enemy.targetIndex = enemy.targetIndex + 1
                 end
             end

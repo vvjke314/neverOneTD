@@ -45,4 +45,17 @@ function Towers.draw()
     end
 end
 
+
+function Towers.remove(towerNumber)
+    table.remove(Towers.list, towerNumber)
+end
+
+function Towers.getTower(x,y)
+    for i, tower in ipairs(Towers.list) do
+        if x == tower.x and y == tower.y then
+            return i
+        end
+    end
+end
+
 return Towers
